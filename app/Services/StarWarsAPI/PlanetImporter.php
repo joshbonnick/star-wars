@@ -18,12 +18,15 @@ class PlanetImporter
      */
     public function import(Collection $planets): void
     {
+        /** @var Collection<int, array<string, mixed>> $planets */
         $planets = $planets
             ->map(fn (PlanetData $planet) => collect((array) $planet)->except(['films', 'residents']))
-            ->map(fn (Collection $data) => [
-                ...$data,
-                'climate' => json_encode($data['climate']),
-                'terrain' => json_encode($data['terrain']),
+            ->map(fn (Collection $planet): array => [
+                ...$planet,
+                'climate' => json_encode($planet['climate']),
+                'terrain' => json_encode($planet['terrain']),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
         Planet::query()->insert($planets->toArray());

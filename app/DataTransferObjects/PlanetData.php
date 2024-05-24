@@ -34,8 +34,17 @@ class PlanetData
         string $terrain,
         public string $surface_water,
     ) {
-        $this->climate = str($climate)->explode(',')->toArray();
-        $this->terrain = str($terrain)->explode(',')->toArray();
-        $this->swapi_id = str($url)->replaceEnd('/', null)->afterLast('/')->numbers()->toInteger();
+        $this->climate = $this->fromCsv($climate);
+        $this->terrain = $this->fromCsv($terrain);
+
+        $this->swapi_id = str($url)->replaceEnd('/', '')->afterLast('/')->numbers()->toInteger();
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function fromCsv(string $csv): array
+    {
+        return str($csv)->explode(',')->map(fn (string $item) => trim($item))->toArray();
     }
 }

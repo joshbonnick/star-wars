@@ -1,7 +1,6 @@
 <?php
 
+use App\Models\Planet;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', fn () => Planet::query()->get());

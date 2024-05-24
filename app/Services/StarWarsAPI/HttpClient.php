@@ -3,8 +3,9 @@
 namespace App\Services\StarWarsAPI;
 
 use App\Services\StarWarsAPI\Contracts\StarWarsAPIClient;
-use Illuminate\Http\Client\ConnectionException;
+use Closure;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Cache;
 
 class HttpClient implements StarWarsAPIClient
 {
@@ -12,35 +13,35 @@ class HttpClient implements StarWarsAPIClient
     {
     }
 
-    /**
-     * @throws ConnectionException
-     */
     public function planets(): array
     {
-        return $this->request->get('planets')->json();
+        return $this->cache('planets', fn () => $this->request->get('planets')->json());
     }
 
-    /**
-     * @throws ConnectionException
-     */
     public function get(string $uri): array
     {
-        return $this->request->get((string) str($uri)->remove(config('swapi.base_url')))->json();
+        return $this->cache($uri,
+            fn (): array => $this->request->get((string) str($uri)->remove(config('swapi.base_url')))->json());
     }
 
-    /**
-     * @throws ConnectionException
-     */
     public function films(): array
     {
-        return $this->request->get('films')->json();
+        return $this->cache('films', fn () => $this->request->get('films')->json());
+    }
+
+    public function people(): array
+    {
+        return $this->cache('people', fn () => $this->request->get('people')->json());
     }
 
     /**
-     * @throws ConnectionException
+     * @template TValue
+     *
+     * @param  Closure(): TValue  $closure  The closure whose result needs to be cached.
+     * @return TValue The result of the closure execution.
      */
-    public function people(): array
+    protected function cache(string $key, Closure $closure): mixed
     {
-        return $this->request->get('people')->json();
+        return Cache::remember("swapi:$key", now()->addDay(), $closure);
     }
 }

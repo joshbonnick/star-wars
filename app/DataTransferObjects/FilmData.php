@@ -2,9 +2,7 @@
 
 namespace App\DataTransferObjects;
 
-use Spatie\LaravelData\Data;
-
-class FilmData extends Data
+class FilmData
 {
     public function __construct(
         public string $title,

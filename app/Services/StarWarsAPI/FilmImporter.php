@@ -15,10 +15,10 @@ class FilmImporter
      */
     public function import(Collection $films): void
     {
-        $films->each($this->createFilm(...));
+        $films->each($this->create(...));
     }
 
-    protected function createFilm(FilmData $from): Film
+    protected function create(FilmData $from): Film
     {
         /** @var Film $film */
         $film = Film::query()->create($from->toArray());

@@ -28,6 +28,11 @@ final readonly class FilmData
     public Collection $people;
 
     /**
+     * @var array<int, string>
+     */
+    public array $producers;
+
+    /**
      * @param  array<int, string>  $characters
      * @param  array<int, string>  $planets
      * @param  array<int, string>  $species
@@ -39,7 +44,7 @@ final readonly class FilmData
         public int $episode_id,
         public string $opening_crawl,
         public string $director,
-        public string $producer,
+        string $producers,
         public string $release_date,
         array $species,
         array $starships,
@@ -49,6 +54,7 @@ final readonly class FilmData
         string $url,
     ) {
         $this->swapi_id = $this->getSwApiId($url);
+        $this->producers = $this->fromCsv($producers);
 
         /** @var PlanetRepository $planet_repository */
         $planet_repository = resolve(PlanetRepository::class);

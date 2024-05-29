@@ -17,6 +17,16 @@ class Film extends Model
     protected $guarded = ['swapi_id', 'created_at', 'updated_at'];
 
     /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'producers' => 'array',
+        ];
+    }
+
+    /**
      * @return BelongsToMany<Person>
      */
     public function residents(): BelongsToMany

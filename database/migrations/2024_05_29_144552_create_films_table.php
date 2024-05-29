@@ -21,7 +21,7 @@ return new class extends Migration
                 ->comment('The opening paragraphs at the beginning of this film.');
             $table->string('director')
                 ->comment('The name of the director of this film.');
-            $table->string('producer')
+            $table->json('producers')
                 ->comment('The name(s) of the producer(s) of this film. Comma separated.');
             $table->date('released_at')
                 ->comment('The ISO 8601 date format of film release at original creator country.');

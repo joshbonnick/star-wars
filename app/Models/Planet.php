@@ -6,11 +6,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Planet extends Model
 {
     use HasFactory;
+
+    protected $hidden = ['swapi_id'];
 
     protected $guarded = ['swapi_id', 'created_at', 'updated_at'];
 
@@ -26,10 +28,10 @@ class Planet extends Model
     }
 
     /**
-     * @return BelongsToMany<Person>
+     * @return HasMany<Person>
      */
-    public function people(): BelongsToMany
+    public function people(): HasMany
     {
-        return $this->belongsToMany(Person::class);
+        return $this->hasMany(Person::class);
     }
 }

@@ -10,10 +10,6 @@ use Illuminate\Support\Collection;
 
 class PlanetImporter
 {
-    public function __construct()
-    {
-    }
-
     /**
      * @param  Collection<int, PlanetData>  $planets
      */

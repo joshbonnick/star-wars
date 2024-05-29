@@ -6,17 +6,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Person extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['swapi_id'];
+
+    protected $guarded = ['swapi_id', 'created_at', 'updated_at'];
+
     /**
-     * @return HasOne<Planet>
+     * @return BelongsTo<Planet, Person>
      */
-    public function homeWorld(): HasOne
+    public function planet(): BelongsTo
     {
-        return $this->hasOne(Planet::class);
+        return $this->belongsTo(Planet::class);
     }
 }

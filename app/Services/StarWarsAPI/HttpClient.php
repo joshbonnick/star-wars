@@ -36,6 +36,11 @@ class HttpClient implements StarWarsAPIClient
         return $this->cache('people', fn () => $this->request->get('people')->json());
     }
 
+    public function species(): array
+    {
+        return $this->cache('species', fn() => $this->request->get('species')->json());
+    }
+
     /**
      * @template TValue
      *

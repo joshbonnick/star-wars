@@ -15,17 +15,16 @@ class PlanetImporter
      */
     public function import(Collection $planets): void
     {
-        /** @var Collection<int, array<string, mixed>> $planets */
-        $planets = $planets
-            ->map(fn (PlanetData $planet) => collect((array) $planet)->except(['films', 'residents']))
-            ->map(fn (Collection $planet): array => [
-                ...$planet,
-                'climate' => json_encode($planet['climate']),
-                'terrain' => json_encode($planet['terrain']),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        $planets->each($this->create(...));
+    }
 
-        Planet::query()->insert($planets->toArray());
+    protected function create(PlanetData $from): Planet
+    {
+        /** @var Planet $film */
+        $film = Planet::query()->create($from->toArray());
+
+        return tap($film, function (Planet $planet) use ($from) {
+            $planet->films()->sync($from->films->pluck('id'));
+        });
     }
 }

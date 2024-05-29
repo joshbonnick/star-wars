@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('species', function (Blueprint $table) {
             $table->id();
+
             $table->string('name')
+                ->index()
                 ->comment('The name of this species.');
+
+            $table->integer('swapi_id')->unique();
+
             $table->string('classification')
                 ->comment('The classification of this species, such as "mammal" or "reptile".');
             $table->string('designation')

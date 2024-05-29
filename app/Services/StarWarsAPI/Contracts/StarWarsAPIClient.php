@@ -25,4 +25,9 @@ interface StarWarsAPIClient
      * @return array{count: int, next: ?string, previous: ?string, results: array<int, array<string, mixed>>}
      */
     public function people(): array;
+
+    /**
+     * @return array{count: int, next: ?string, previous: ?string, results: array<int, array<string, mixed>>}
+     */
+    public function species(): array;
 }

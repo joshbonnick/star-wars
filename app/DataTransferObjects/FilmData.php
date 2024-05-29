@@ -7,8 +7,6 @@ namespace App\DataTransferObjects;
 use App\DataTransferObjects\Concerns\InteractsWithSwapiResources;
 use App\Models\Person;
 use App\Models\Planet;
-use App\Repositories\PeopleRepository;
-use App\Repositories\PlanetRepository;
 use Illuminate\Support\Collection;
 
 final readonly class FilmData
@@ -56,17 +54,8 @@ final readonly class FilmData
         $this->swapi_id = $this->getSwApiId($url);
         $this->producers = $this->fromCsv($producers);
 
-        /** @var PlanetRepository $planet_repository */
-        $planet_repository = resolve(PlanetRepository::class);
-
-        $this->planets = collect($planets)
-            ->map(fn (string $planet_url) => $planet_repository->findOrImport($this->getSwApiId($planet_url)));
-
-        /** @var PeopleRepository $people_repository */
-        $people_repository = resolve(PeopleRepository::class);
-
-        $this->people = collect($characters)
-            ->map(fn (string $person_url) => $people_repository->findOrImport($this->getSwApiId($person_url)));
+        $this->people = $this->peopleFrom($characters);
+        $this->planets = $this->planetsFrom($planets);
     }
 
     /**
@@ -79,7 +68,7 @@ final readonly class FilmData
             'episode_id' => $this->episode_id,
             'opening_crawl' => $this->opening_crawl,
             'director' => $this->director,
-            'producer' => $this->producer,
+            'producers' => $this->producers,
             'released_at' => $this->release_date,
         ];
     }

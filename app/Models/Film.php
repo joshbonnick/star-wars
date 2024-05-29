@@ -14,7 +14,7 @@ class Film extends Model
 
     protected $hidden = ['swapi_id'];
 
-    protected $guarded = ['swapi_id', 'created_at', 'updated_at'];
+    protected $guarded = ['created_at', 'updated_at'];
 
     /**
      * @return array<string, string>

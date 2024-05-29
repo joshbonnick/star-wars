@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\StarWarsAPI;
 
 use App\Services\StarWarsAPI\Contracts\StarWarsAPIClient;

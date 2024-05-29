@@ -42,7 +42,7 @@ final readonly class FilmData
         public int $episode_id,
         public string $opening_crawl,
         public string $director,
-        string $producers,
+        string $producer,
         public string $release_date,
         array $species,
         array $starships,
@@ -52,7 +52,7 @@ final readonly class FilmData
         string $url,
     ) {
         $this->swapi_id = $this->getSwApiId($url);
-        $this->producers = $this->fromCsv($producers);
+        $this->producers = $this->fromCsv($producer);
 
         $this->people = $this->peopleFrom($characters);
         $this->planets = $this->planetsFrom($planets);

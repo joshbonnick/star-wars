@@ -15,17 +15,16 @@ class PeopleImporter
      */
     public function import(Collection $people): void
     {
-        /** @var Collection<int, array<string, mixed>> $people */
-        $people = $people
-            ->map(fn (PersonData $person) => collect((array) $person)->except([
-                'films', 'species', 'starships', 'vehicles',
-            ]))
-            ->map(fn (Collection $person): array => [
-                ...$person,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        $people->each($this->create(...));
+    }
 
-        Person::query()->insert($people->toArray());
+    protected function create(PersonData $from): Person
+    {
+        /** @var Person $film */
+        $film = Person::query()->create($from->toArray());
+
+        return tap($film, function (Person $person) use ($from) {
+            $person->films()->sync($from->films->pluck('id'));
+        });
     }
 }

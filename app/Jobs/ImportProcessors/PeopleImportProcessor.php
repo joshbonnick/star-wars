@@ -26,6 +26,10 @@ class PeopleImportProcessor implements ShouldQueue
 
     public function handle(PeopleImporter $importer): void
     {
+        if (cache()->driver('array')->get('swapi:importing', false) === 'people') {
+            return;
+        }
+
         $importer->import(
             people: collect($this->results)
                 ->map(fn (array $person): Collection => collect($person)->except(['created', 'edited']))

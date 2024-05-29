@@ -22,6 +22,8 @@ class SpeciesImporter extends Command
 
     public function handle(StarWarsAPIClient $api): int
     {
+        cache()->driver('array')->set('swapi:importing', 'species');
+
         do {
             $response = isset($response) ? $api->get($response['next']) : $api->species();
 

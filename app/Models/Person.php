@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Person extends Model
 {
@@ -22,5 +23,13 @@ class Person extends Model
     public function planet(): BelongsTo
     {
         return $this->belongsTo(Planet::class);
+    }
+
+    /**
+     * @return BelongsToMany<Film>
+     */
+    public function films(): BelongsToMany
+    {
+        return $this->belongsToMany(Film::class);
     }
 }

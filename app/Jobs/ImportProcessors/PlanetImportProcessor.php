@@ -26,6 +26,10 @@ class PlanetImportProcessor implements ShouldQueue
 
     public function handle(PlanetImporter $importer): void
     {
+        if (cache()->driver('array')->get('swapi:importing', false) === 'planets') {
+            return;
+        }
+
         $importer->import(
             planets: collect($this->results)
                 ->map(fn (array $planet): Collection => collect($planet)->except(['created', 'edited']))

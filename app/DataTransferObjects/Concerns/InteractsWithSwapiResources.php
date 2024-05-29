@@ -7,9 +7,11 @@ namespace App\DataTransferObjects\Concerns;
 use App\Models\Film;
 use App\Models\Person;
 use App\Models\Planet;
+use App\Models\Species;
 use App\Repositories\FilmRepository;
 use App\Repositories\PeopleRepository;
 use App\Repositories\PlanetRepository;
+use App\Repositories\SpeciesRepository;
 use Illuminate\Support\Collection;
 
 trait InteractsWithSwapiResources
@@ -36,8 +38,8 @@ trait InteractsWithSwapiResources
         /** @var FilmRepository $film_repository */
         $film_repository = resolve(FilmRepository::class);
 
-        return collect($films)->map(fn (string $film_url
-        ) => $film_repository->findOrImport($this->getSwApiId($film_url)));
+        return collect($films)
+            ->map(fn (string $film_url) => $film_repository->findOrImport($this->getSwApiId($film_url)));
     }
 
     /**
@@ -49,8 +51,8 @@ trait InteractsWithSwapiResources
         /** @var PeopleRepository $people_repository */
         $people_repository = resolve(PeopleRepository::class);
 
-        return collect($people)->map(fn (string $person_url
-        ) => $people_repository->findOrImport($this->getSwApiId($person_url)));
+        return collect($people)
+            ->map(fn (string $person_url) => $people_repository->findOrImport($this->getSwApiId($person_url)));
     }
 
     /**
@@ -62,7 +64,20 @@ trait InteractsWithSwapiResources
         /** @var PlanetRepository $planet_repository */
         $planet_repository = resolve(PlanetRepository::class);
 
-        return collect($planets)->map(fn (string $planet_url
-        ) => $planet_repository->findOrImport($this->getSwApiId($planet_url)));
+        return collect($planets)
+            ->map(fn (string $planet_url) => $planet_repository->findOrImport($this->getSwApiId($planet_url)));
+    }
+
+    /**
+     * @param  array<int, string>  $species
+     * @return Collection<int, Species>
+     */
+    protected function speciesFrom(array $species): Collection
+    {
+        /** @var SpeciesRepository $species_repository */
+        $species_repository = resolve(SpeciesRepository::class);
+
+        return collect($species)
+            ->map(fn (string $species_url) => $species_repository->findOrImport($this->getSwApiId($species_url)));
     }
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\DataTransferObjects;
 
 use App\DataTransferObjects\Concerns\InteractsWithSwapiResources;
+use App\Models\Film;
+use App\Models\Person;
 
 final readonly class PlanetData
 {
@@ -23,12 +25,13 @@ final readonly class PlanetData
     public array $terrain;
 
     /**
-     * @param  array<int, PersonData>  $residents
-     * @param  array<int, FilmData>  $films
+     * @param  array<int, Person>  $residents
+     * @param  array<int, Film>  $films
+     * @param  string|array<int, string>  $climate
+     * @param  string|array<int, string>  $terrain
      */
     public function __construct(
         public string $name,
-        string $url,
         public array $residents,
         public array $films,
         public string $diameter,
@@ -36,11 +39,19 @@ final readonly class PlanetData
         public string $orbital_period,
         public string $gravity,
         public string $population,
-        string $climate,
-        string $terrain,
+        string|array $climate,
+        string|array $terrain,
         public string $surface_water,
+        string $url = '',
     ) {
-        [$this->climate, $this->terrain] = [$this->fromCsv($climate), $this->fromCsv($terrain)];
+        $this->climate = is_string($climate)
+            ? $this->fromCsv($climate)
+            : $climate;
+
+        $this->terrain = is_string($terrain)
+            ? $this->fromCsv($terrain)
+            : $terrain;
+
         $this->swapi_id = $this->getSwApiId(from: $url);
     }
 }

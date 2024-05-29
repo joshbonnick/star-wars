@@ -19,6 +19,7 @@ class PersonFactory extends Factory
     public function definition(): array
     {
         return [
+            'swapi_id' => $this->faker->unique()->numberBetween(0, 100),
             'name' => $this->faker->name,
             'birth_year' => $this->faker->numberBetween(-50, 50).' BBY',
             'eye_color' => $this->faker->randomElement(['blue', 'brown', 'green', 'unknown', 'n/a']),

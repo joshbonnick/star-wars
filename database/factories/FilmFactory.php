@@ -19,6 +19,7 @@ class FilmFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
+            'swapi_id' => $this->faker->unique()->numberBetween(0, 100),
             'episode_id' => $this->faker->randomDigitNotNull(),
             'opening_crawl' => $this->faker->paragraph(),
             'director' => $this->faker->name(),

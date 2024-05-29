@@ -64,6 +64,7 @@ final readonly class FilmData
     public function toArray(): array
     {
         return [
+            'swapi_id' => $this->swapi_id,
             'title' => $this->title,
             'episode_id' => $this->episode_id,
             'opening_crawl' => $this->opening_crawl,

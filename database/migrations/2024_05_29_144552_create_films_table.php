@@ -14,6 +14,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->index()
                 ->comment('The title of this film');
+            $table->integer('swapi_id')->unique();
             $table->integer('episode_id')
                 ->unique()
                 ->comment('The episode number of this film.');

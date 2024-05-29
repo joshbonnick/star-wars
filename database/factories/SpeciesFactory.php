@@ -20,6 +20,7 @@ class SpeciesFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
+            'swapi_id' => $this->faker->unique()->numberBetween(0, 100),
             'classification' => $this->faker->randomElement([
                 'mammal', 'reptile', 'amphibian', 'bird', 'fish', 'insect',
             ]),

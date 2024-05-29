@@ -44,7 +44,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function stub(string $path): string
 {
-    // ..
+    return file_get_contents(__DIR__."/Fixtures/Stubs/$path") ?: throw new Exception("Unable to read stub file: $path");
 }

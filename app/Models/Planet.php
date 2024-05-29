@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Planet extends Model
 {
@@ -22,5 +23,13 @@ class Planet extends Model
             'terrain' => 'array',
             'climate' => 'array',
         ];
+    }
+
+    /**
+     * @return BelongsToMany<Person>
+     */
+    public function people(): BelongsToMany
+    {
+        return $this->belongsToMany(Person::class);
     }
 }

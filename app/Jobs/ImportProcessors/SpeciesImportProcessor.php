@@ -26,10 +26,6 @@ class SpeciesImportProcessor implements ShouldQueue
 
     public function handle(SpeciesImporter $importer): void
     {
-        if (cache()->driver('array')->get('swapi:importing', false) === 'species') {
-            return;
-        }
-
         $importer->import(
             species: collect($this->results)
                 ->map(fn (array $species): Collection => collect($species)->except(['created', 'edited']))

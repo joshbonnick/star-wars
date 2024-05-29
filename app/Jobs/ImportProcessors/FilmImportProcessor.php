@@ -26,10 +26,6 @@ class FilmImportProcessor implements ShouldQueue
 
     public function handle(FilmImporter $importer): void
     {
-        if (cache()->driver('array')->get('swapi:importing', false) === 'films') {
-            return;
-        }
-
         $importer->import(
             films: collect($this->results)
                 ->map(fn (array $film): Collection => collect($film)->except(['created', 'edited']))

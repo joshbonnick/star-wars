@@ -54,8 +54,8 @@ final readonly class FilmData
         $this->swapi_id = $this->getSwApiId($url);
         $this->producers = $this->fromCsv($producer);
 
-        $this->people = $this->peopleFrom($characters);
         $this->planets = $this->planetsFrom($planets);
+        $this->people = $this->peopleFrom($characters);
     }
 
     /**

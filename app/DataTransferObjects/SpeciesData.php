@@ -6,7 +6,6 @@ namespace App\DataTransferObjects;
 
 use App\DataTransferObjects\Concerns\InteractsWithSwapiResources;
 use App\Models\Film;
-use App\Models\Person;
 use App\Models\Planet;
 use App\Repositories\PlanetRepository;
 use Illuminate\Support\Collection;
@@ -17,7 +16,7 @@ final readonly class SpeciesData
 
     public int $swapi_id;
 
-    public Planet $planet;
+    public ?Planet $planet;
 
     /**
      * @var array<int,string>
@@ -40,11 +39,6 @@ final readonly class SpeciesData
     public Collection $films;
 
     /**
-     * @var Collection<int, Person>
-     */
-    public Collection $people;
-
-    /**
      * @param  array<int,string>  $films
      * @param  array<int,string>  $people
      */
@@ -58,7 +52,7 @@ final readonly class SpeciesData
         string $hair_colors,
         string $skin_colors,
         public string $language,
-        string $homeworld,
+        ?string $homeworld,
         string $url,
         array $films,
         array $people,
@@ -69,12 +63,15 @@ final readonly class SpeciesData
         $this->hair_colors = $this->fromCsv($hair_colors);
         $this->skin_colors = $this->fromCsv($skin_colors);
 
-        /** @var PlanetRepository $planet_repository */
-        $planet_repository = resolve(PlanetRepository::class);
-        $this->planet = $planet_repository->findOrImport($this->getSwApiId(from: $homeworld));
+        if (! blank($homeworld)) {
+            /** @var PlanetRepository $planet_repository */
+            $planet_repository = resolve(PlanetRepository::class);
+            $this->planet = $planet_repository->findOrImport($this->getSwApiId(from: $homeworld));
+        } else {
+            $this->planet = null;
+        }
 
         $this->films = $this->filmsFrom($films);
-        $this->people = $this->peopleFrom($people);
     }
 
     /**
@@ -92,7 +89,7 @@ final readonly class SpeciesData
             'hair_colors' => $this->hair_colors,
             'skin_colors' => $this->skin_colors,
             'language' => $this->language,
-            'planet_id' => $this->planet->id,
+            'planet_id' => $this->planet?->id,
         ];
     }
 }

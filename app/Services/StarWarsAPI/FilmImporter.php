@@ -15,17 +15,7 @@ class FilmImporter
      */
     public function import(Collection $films): void
     {
-        $films->each($this->create(...));
-    }
-
-    protected function create(FilmData $from): Film
-    {
-        /** @var Film $film */
-        $film = Film::query()->create($from->toArray());
-
-        return tap($film, function (Film $film) use ($from) {
-            $film->residents()->sync($from->people->pluck('id'));
-            $film->planets()->sync($from->planets->pluck('id'));
-        });
+        $films->each(fn (FilmData $film) => Film::query()->firstOrCreate(['swapi_id' => $film->swapi_id],
+            $film->toArray()));
     }
 }

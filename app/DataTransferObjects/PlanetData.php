@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace App\DataTransferObjects;
 
 use App\DataTransferObjects\Concerns\InteractsWithSwapiResources;
-use App\Models\Film;
-use App\Models\Person;
-use Illuminate\Support\Collection;
 
 final readonly class PlanetData
 {
@@ -24,16 +21,6 @@ final readonly class PlanetData
      * @var array<int, string>
      */
     public array $terrain;
-
-    /**
-     * @var Collection<int, Film>
-     */
-    public Collection $films;
-
-    /**
-     * @var Collection<int, Person>
-     */
-    public Collection $people;
 
     /**
      * @param  array<int, string>  $residents
@@ -56,8 +43,6 @@ final readonly class PlanetData
         $this->climate = $this->fromCsv($climate);
         $this->terrain = $this->fromCsv($terrain);
         $this->swapi_id = $this->getSwApiId($url);
-        $this->films = $this->filmsFrom($films);
-        $this->people = $this->peopleFrom($residents);
     }
 
     /**

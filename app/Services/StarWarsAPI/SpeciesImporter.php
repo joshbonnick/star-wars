@@ -15,17 +15,12 @@ class SpeciesImporter
      */
     public function import(Collection $species): void
     {
-        $species->each($this->create(...));
-    }
+        $species->each(function (SpeciesData $species_data) {
+            /** @var Species $species */
+            $species = Species::query()->firstOrCreate(['swapi_id' => $species_data->swapi_id],
+                $species_data->toArray());
 
-    protected function create(SpeciesData $from): Species
-    {
-        /** @var Species $film */
-        $film = Species::query()->create($from->toArray());
-
-        return tap($film, function (Species $species) use ($from) {
-            $species->films()->sync($from->films->pluck('id'));
-            $species->people()->sync($from->people->pluck('id'));
+            $species->films()->sync($species_data->films->pluck('id'));
         });
     }
 }

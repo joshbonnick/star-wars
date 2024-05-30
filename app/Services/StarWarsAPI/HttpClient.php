@@ -38,7 +38,7 @@ class HttpClient implements StarWarsAPIClient
 
     public function species(): array
     {
-        return $this->cache('species', fn() => $this->request->get('species')->json());
+        return $this->cache('species', fn () => $this->request->get('species')->json());
     }
 
     /**

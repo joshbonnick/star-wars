@@ -15,16 +15,7 @@ class PeopleImporter
      */
     public function import(Collection $people): void
     {
-        $people->each($this->create(...));
-    }
-
-    protected function create(PersonData $from): Person
-    {
-        /** @var Person $film */
-        $film = Person::query()->create($from->toArray());
-
-        return tap($film, function (Person $person) use ($from) {
-            $person->films()->sync($from->films->pluck('id'));
-        });
+        $people->each(fn (PersonData $person) => Person::query()->firstOrCreate(['swapi_id' => $person->swapi_id],
+            $person->toArray()));
     }
 }

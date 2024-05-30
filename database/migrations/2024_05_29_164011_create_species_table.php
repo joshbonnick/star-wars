@@ -41,6 +41,7 @@ return new class extends Migration
 
             $table->foreignIdFor(Planet::class)
                 ->comment('The URL of a planet resource, a planet that this species originates from.')
+                ->nullable()
                 ->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

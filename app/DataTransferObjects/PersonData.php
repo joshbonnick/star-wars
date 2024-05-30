@@ -5,27 +5,16 @@ declare(strict_types=1);
 namespace App\DataTransferObjects;
 
 use App\DataTransferObjects\Concerns\InteractsWithSwapiResources;
-use App\Models\Film;
-use App\Models\Species;
-use Illuminate\Support\Collection;
+use App\Models\Planet;
+use App\Repositories\PlanetRepository;
 
 final readonly class PersonData
 {
     use InteractsWithSwapiResources;
 
-    public int $planet_id;
+    public Planet $planet;
 
     public int $swapi_id;
-
-    /**
-     * @var Collection<int, Film>
-     */
-    public Collection $films;
-
-    /**
-     * @var Collection<int, Species>
-     */
-    public Collection $species;
 
     /**
      * @param  array<int,string>  $films
@@ -49,10 +38,11 @@ final readonly class PersonData
         public array $starships,
         public array $vehicles,
     ) {
-        [$this->swapi_id, $this->planet_id] = [$this->getSwApiId($url), $this->getSwApiId($homeworld)];
+        $this->swapi_id = $this->getSwApiId($url);
 
-        $this->films = $this->filmsFrom($films);
-        $this->species = $this->speciesFrom($species);
+        /** @var PlanetRepository $planet_repository */
+        $planet_repository = resolve(PlanetRepository::class);
+        $this->planet = $planet_repository->findOrImport($this->getSwApiId(from: $homeworld));
     }
 
     /**
@@ -69,7 +59,7 @@ final readonly class PersonData
             'height' => $this->height,
             'mass' => $this->mass,
             'skin_color' => $this->skin_color,
-            'planet_id' => $this->planet_id,
+            'planet_id' => $this->planet->id,
             'swapi_id' => $this->swapi_id,
         ];
     }

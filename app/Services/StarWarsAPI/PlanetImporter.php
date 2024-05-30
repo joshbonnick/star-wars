@@ -15,16 +15,7 @@ class PlanetImporter
      */
     public function import(Collection $planets): void
     {
-        $planets->each($this->create(...));
-    }
-
-    protected function create(PlanetData $from): Planet
-    {
-        /** @var Planet $film */
-        $film = Planet::query()->create($from->toArray());
-
-        return tap($film, function (Planet $planet) use ($from) {
-            $planet->films()->sync($from->films->pluck('id'));
-        });
+        $planets->each(fn (PlanetData $planet) => Planet::query()->firstOrCreate(['swapi_id' => $planet->swapi_id],
+            $planet->toArray()));
     }
 }
